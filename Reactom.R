@@ -1,19 +1,19 @@
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-BiocManager::install("clusterProfiler")
-
-install_github("GuangchuangYu/bitr")
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-bitr(geneList$V2)
-BiocManager::install("ReactomePA")
-#devtools::install_github("r-lib/rlang", build_vignettes = TRUE)
-library(ReactomePA)
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-BiocManager::install("org.Hs.eg.db")
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("clusterProfiler")
+# 
+# install_github("GuangchuangYu/bitr")
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# bitr(geneList$V2)
+# BiocManager::install("ReactomePA")
+# #devtools::install_github("r-lib/rlang", build_vignettes = TRUE)
+# library(ReactomePA)
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("org.Hs.eg.db")
 
 library(BiocManager)
 library(clusterProfiler)
