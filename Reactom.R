@@ -20,18 +20,19 @@ library(clusterProfiler)
 library(ReactomePA)
 library(org.Hs.eg.db)
 
-load("~/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/second_analysis_H1_H3_H4/data_072919.RData")
-df.100000$Gene<-as.character(df.100000$Gene)
-gene.ind<-which(df.100000$PV < 0.1)
-setwd("~/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/file_list/list_analysis_3/")
-Genes<-df.100000[gene.ind,1]
+
+# load("~/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/second_analysis_H1_H3_H4/data_072919.RData")
+# df.100000$Gene<-as.character(df.100000$Gene)
+# gene.ind<-which(df.100000$PV < 0.1)
+setwd("~/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/122919_bow1_UMI_tryhard_redo/reactom/")
+#Genes<-df.100000[gene.ind,1]
 #saveRDS(Genes,"genelist.txt")
 geneList_vec<-readRDS("genelist.txt")
 
 data(geneList)
 ####converting using david
 library("dplyr")
-geneList<-read.table(file = "From_david.txt"       ,fill = T,stringsAsFactors = F)
+geneList<-read.table(file = "From_david.txt",fill = T,stringsAsFactors = F)
 df<-geneList %>% filter(V3=="Homo")
 row.names(df)<-df$V1
 df.filter<-df[,c(1,2)]
