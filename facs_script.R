@@ -5,26 +5,85 @@ library("ggplot2")
 #### parameters ####
 setwd("/Users/kanferg/Desktop/Gil_LabWork/AIMS/AIMS_090518/Facs_analysis/selected_data/")
 dir()
-f.name <- "Specimen_001_TFeb-H-1_post sort-Q1_002"  # name of the file you want to analyze, file must have extension ".FCS"
+f.name <- "Specimen_001_TFeb-H-1_001_001"  # name of the file you want to analyze, file must have extension ".FCS"
 
 #fcm <- read.FCS(paste0(f.name,".fcs"), transformation = "scale",alter.names = TRUE)
 fcm <- read.FCS(paste0(f.name,".fcs"),alter.names = TRUE)
 
 fcm <- read.FCS(paste0(f.name, '.FCS'))
 fcm <- as.data.frame((exprs(fcm)))
+summary(fcm$`G610-A`)
+
+#colfunc <- colorRampPalette(c("white", "lightblue", "green", "yellow", "red"))
+colfunc <- colorRampPalette(c("white","red","yellow","green","lightblue"))
+
+colnames(fcm)
+ggplot(fcm, aes(x=fcm$`B530-A`, y=fcm$`BV421-A`)) +
+  ylim(-100,10000) +
+  xlim(-10000,10000) +
+  stat_density2d(geom="tile", aes(fill = ..density..), contour = F) +
+  scale_fill_gradientn(colours=colfunc(400)) + # gives the colour plot
+  geom_density2d(colour="black", bins=10)
+
+# draws the lines inside
+  theme(axis.title.x =element_text(size = 14))+
+  theme(axis.title.y =element_text(size = 14))+
+  theme(axis.text = element_text(size=12))+
+  theme(axis.line = element_line(colour = "black",size=1), panel.border = element_blank(),panel.background = element_blank())+
+  # theme(axis.text.x = element_text( hjust = 1))+
+  labs(title="", x="610", y="450")+ 
+  #scale_x_continuous(breaks = (seq(0, 15, by=1)))+
+  # geom_vline(xintercept = vec_zscore, linetype="dotted", size=  0.5, color = "red")+
+  #geom_vline(xintercept = non_target.log2.norm, linetype="dotted", size=  0.5, color = "black")+  
+  #geom_text(aes(x=0, label="Activated cell: 1,132#", y=3000),  text=element_text(size=14))+
+  #geom_text(aes(x=0, label="Unactivated cells: 177,038#", y=3500), text=element_text(size=14))+ 
+  #geom_vline(xintercept = 2400, linetype="dotted", color = "blue", size=1.5)+
+  theme(panel.border = element_blank(),panel.background = element_blank())+
+  theme(panel.grid.minor = element_line(colour = "white"))
+setwd("/Users/kanferg/Desktop/Gil_LabWork/AIMS/AIMS_090518/Facs_analysis/Chart/")
+ggsave(last_plot(), filename = "H1.svg", width=5.5, height=5.5, dpi = 72) 
+
 
 ggplot(fcm,aes(fcm$`G610-A`))+
   geom_histogram(binwidth = 1)+
   geom_density(aes(y=1 * ..count..))
 
-colfunc <- colorRampPalette(c("white", "lightblue", "green", "yellow", "red"))
-colnames(fcm)
-ggplot(fcm, aes(x=fcm$`G610-A`, y=fcm$`BV421-A`)) +
-  ylim(0, 500000) +
-  xlim(0,5000000) +
-  stat_density2d(geom="tile", aes(fill = ..density..), contour = FALSE) +
+g1<-ggplot(fcm,aes(fcm[,10]))+
+  geom_histogram(aes(y = ..count..,color = "red"),show.legend=F) +
+  scale_color_manual(values = c("#FEE08B","red"),alpha(0.1,0.9))+                 
+  geom_density()+
+  theme(axis.title.x =element_text(size = 14))+
+  theme(axis.title.y =element_text(size = 14))+
+  theme(axis.text = element_text(size=12))+
+  theme(axis.line = element_line(colour = "black",size=1), panel.border = element_blank(),panel.background = element_blank())+
+  # theme(axis.text.x = element_text( hjust = 1))+
+  labs(title="", x="mCharry Signal, AU", y="FACS intensity signal frequency, AU")+ 
+  # geom_vline(xintercept = vec_zscore, linetype="dotted", size=  0.5, color = "red")+
+  #geom_vline(xintercept = non_target.log2.norm, linetype="dotted", size=  0.5, color = "black")+  
+  #geom_text(aes(x=0, label="Activated cell: 1,132#", y=3000),  text=element_text(size=14))+
+  #geom_text(aes(x=0, label="Unactivated cells: 177,038#", y=3500), text=element_text(size=14))+ 
+  #geom_vline(xintercept = 2400, linetype="dotted", color = "blue", size=1.5)+
+  theme(panel.border = element_blank(),panel.background = element_blank())+
+  theme(panel.grid.minor = element_line(colour = "white"))
+ggsave(last_plot(), filename = "H1.svg", width=5.5, height=5.5, dpi = 72) 
+
+g1 + scale_x_continuous(limits=c(0,1000))
+
+
+ggplot(fcm, aes(x=fcm$`G610-A`, y=fcm$`V450-A`)) +
+  ylim(-100, 200) +
+  xlim(-100,250) +
+  stat_density2d(geom="tile", aes(fill = ..density..), contour = F) +
   scale_fill_gradientn(colours=colfunc(400)) + # gives the colour plot
-  geom_density2d(colour="black", bins=5) # draws the lines inside
+  geom_density2d(colour="black", bins=9) # draws the lines inside
+
+ggplot(fcm, aes(x=fcm$`G610-A`, y=fcm$`V450-A`)) +
+  ylim(-100, 200) +
+  xlim(-100,250) +
+  stat_density2d(geom="tile", aes(fill = ..density..), contour = F) +
+  scale_fill_gradientn(colours=colfunc(400)) + # gives the colour plot
+  geom_density2d(colour="black", bins=9)
+
 
 # fcm <- na.omit(fcm)
 # head(fcm,5)
