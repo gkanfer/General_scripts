@@ -50,14 +50,15 @@ roast.export<-rbind(readRDS("roast_h1.rds"),
                     readRDS("roast_h7.rds"))
 
 
-roast.sel<-roast.export %>% filter(FDR < 0.3, FC>1)
+roast.sel<-roast.export %>% filter(FDR < 0.3, FC>1.47)
 str(roast.sel)
 # creat genesymble matrix
 
 geneSymbols <- mapIds(org.Hs.eg.db, keys=roast.sel$Gene, column="ENTREZID", keytype="ALIAS", multiVals="first") 
 inds <- which(!is.na(geneSymbols))
 found_genes <- geneSymbols[inds]  
-
+nrow(roast.sel)
+length(geneSymbols)
 
 
 de<-NULL
@@ -95,9 +96,25 @@ keg <- kegga(de$V2,species="Hs")
 topKEGG(keg, n=c(10))
 setwd("/Users/kanferg/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/011020_summary/Export/roast/kegg/")
 #dir.create("kegg")
-pv.out <- pathview(gene.data = mat.de[,1], pathway.id = "01521",species = "hsa")
+pv.out <- pathview(gene.data = mat.de[,1], pathway.id = "04152",species = "hsa")
 # saveRDS(de,"DE_table.rds")
 # saveRDS(mat.de,"DE_matrix.rds")
+
+
+
+#------------------------------------------------------------------------------
+# Reactom analysis
+#------------------------------------------------------------------------------
+library(ReactomePA)
+x <- enrichPathway(gene=de$V2,pvalueCutoff=0.1, readable=T)
+head(as.data.frame(x))
+barplot(x, showCategory=10)
+dotplot(x, showCategory=15) 
+emapplot(x)
+cnetplot(x, categorySize="pvalue", foldChange=de$V3)
+
+
+
 
 
 #------------------------------------------------------------------------------
@@ -154,7 +171,13 @@ setwd("/Users/kanferg/Desktop/Gil_LabWork/AIMS/AIMS_090518/Tfeb_NGS_analysis/011
 pv.out <- pathview(gene.data = mat.de[,1], pathway.id = "05230",species = "hsa")
 
 
-
-
- 
-
+#------------------------------------------------------------------------------
+# Reactom analysis
+#------------------------------------------------------------------------------
+library(ReactomePA)
+x <- enrichPathway(gene=de$V2,pvalueCutoff=0.1, readable=T)
+head(as.data.frame(x))
+barplot(x, showCategory=10)
+dotplot(x, showCategory=15) 
+emapplot(x)
+cnetplot(x, categorySize="pvalue", foldChange=de$V3)
